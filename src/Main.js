@@ -12,7 +12,6 @@ const Main = ({ contestant, onSubmit }) => {
   return (
     <div className="body">
       <input
-        autofocus="true"
         value={inputValue}
         onChange={e => setInputValue(e.target.value)}
         className="mole-input"
