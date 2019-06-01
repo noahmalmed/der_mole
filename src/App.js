@@ -1,26 +1,60 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import Main from "./Main";
+import Admin from "./Admin";
+import red_smear from "./images/red_smear.png";
+import green_smear from "./images/green_smear.png";
+import "./App.css";
 
-function App() {
+const App = () => {
+  const [contestant, setContestant] = useState();
+  const [overlaySource, setOverlaySource] = useState();
+  const [adminIsShowing, setAdminIsShowing] = useState(false);
+
+  const closeImage = () => {
+    setOverlaySource(null);
+  };
+
+  useEffect(() => {
+    if (overlaySource) {
+      document.addEventListener("keydown", closeImage, false);
+    } else {
+      document.removeEventListener("keydown", closeImage, false);
+    }
+  }, [overlaySource]);
+
+  if (overlaySource) {
+    return <img src={overlaySource} className="feedback-image" alt="" />;
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div className="container">
+      <div className="header">
+        <div className="hidden">{contestant}</div>
+        <button
+          className="hidden"
+          type="button"
+          onClick={() => setAdminIsShowing(!adminIsShowing)}
         >
-          Learn React
-        </a>
-      </header>
+          Edit Contestant
+        </button>
+      </div>
+      {adminIsShowing ? (
+        <Admin
+          onContestantEntered={contestantName => {
+            setContestant(contestantName);
+            setAdminIsShowing(false);
+          }}
+          initialValue={contestant}
+        />
+      ) : (
+        <Main
+          onSubmit={isOut => {
+            setOverlaySource(isOut ? red_smear : green_smear);
+          }}
+          contestant={contestant}
+        />
+      )}
     </div>
   );
-}
+};
 
 export default App;
