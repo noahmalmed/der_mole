@@ -6,7 +6,7 @@ import green_smear from "./images/green_smear.png";
 import "./App.css";
 
 const App = () => {
-  const [contestant, setContestant] = useState();
+  const [contestants, setContestants] = useState([]);
   const [overlaySource, setOverlaySource] = useState();
   const [adminIsShowing, setAdminIsShowing] = useState(false);
 
@@ -28,7 +28,7 @@ const App = () => {
   return (
     <div className="container">
       <div className="header">
-        <div className="hidden">{contestant}</div>
+        <div className="hidden">{contestants}</div>
         <button
           className="hidden"
           type="button"
@@ -39,20 +39,19 @@ const App = () => {
       </div>
       {adminIsShowing ? (
         <Admin
-          onContestantEntered={contestantName => {
-            setContestant(contestantName);
+          onContestantEntered={contestantNames => {
+            setContestants(contestantNames);
             setAdminIsShowing(false);
           }}
-          initialValue={contestant}
         />
       ) : (
-        <Main
-          onSubmit={isOut => {
-            setOverlaySource(isOut ? red_smear : green_smear);
-          }}
-          contestant={contestant}
-        />
-      )}
+          <Main
+            onSubmit={isOut => {
+              setOverlaySource(isOut ? red_smear : green_smear);
+            }}
+            contestants={contestants}
+          />
+        )}
     </div>
   );
 };
